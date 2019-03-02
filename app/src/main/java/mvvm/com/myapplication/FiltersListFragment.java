@@ -69,7 +69,7 @@ public class FiltersListFragment extends Fragment implements FiltersListFragment
         return itemView;
     }
 
-    private void displayThumbnail(final Bitmap bitmap) {
+    public void displayThumbnail(final Bitmap bitmap) {
         Runnable r = new Runnable() {
             @Override
             public void run() {
