@@ -22,9 +22,10 @@
             android:textSize="20sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
         <SeekBar
             android:id="@+id/seekbar_brightness"
-            android:layout_width="wrap_content"
+            android:layout_width="276dp"
             android:layout_height="wrap_content" />
     </LinearLayout>
     <LinearLayout
@@ -39,9 +40,10 @@
             android:textSize="20sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
         <SeekBar
             android:id="@+id/seekbar_constraint"
-            android:layout_width="wrap_content"
+            android:layout_width="225dp"
             android:layout_height="wrap_content" />
     </LinearLayout>
     <LinearLayout
@@ -56,9 +58,10 @@
             android:textSize="20sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
         <SeekBar
             android:id="@+id/seekbar_saturation"
-            android:layout_width="wrap_content"
+            android:layout_width="219dp"
             android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>
