@@ -60,10 +60,10 @@ import mvvm.com.myapplication.Utils.BitmapUtils;
 public class MainActivity extends AppCompatActivity implements FiltersListFragmentListener,EditImageFragmentListener, BrushFragmentListener, EmojiFragmentListener, AddTextFragmentListener {
     public static final String pictureName= "josue.jpg";
     public static final int PERMISSION_PICK_IMAGE=1000;
-
+    public static final int PERMISSION_INSERT_IMAGE=1001;
     PhotoEditorView photoEditorView;
     PhotoEditor photoEditor;
-    CardView  btn_filters_list,btn_edit,btn_brush,btn_emoji,btn_add_text;
+    CardView  btn_filters_list,btn_edit,btn_brush,btn_emoji,btn_add_text,btn_add_image;
 
 
     CoordinatorLayout coordinatorLayout;
@@ -99,14 +99,15 @@ public class MainActivity extends AppCompatActivity implements FiltersListFragme
                 .setDefaultEmojiTypeface(Typeface.createFromAsset(getAssets(),"emojione-android.ttf"))
                 .build();
 
-
         coordinatorLayout=(CoordinatorLayout)findViewById(R.id.coordinator);
-
         btn_edit=(CardView)findViewById(R.id.btn_edit);
         btn_filters_list=(CardView)findViewById(R.id.btn_filters_list);
         btn_brush=(CardView) findViewById(R.id.btn_brush);
         btn_emoji=(CardView)findViewById(R.id.btn_emoji);
-        btn_add_text=(CardView)findViewById(R.id.btn_add_text) ;
+        btn_add_text=(CardView)findViewById(R.id.btn_add_text);
+        btn_add_image=(CardView)findViewById(R.id.btn_add_image);
+
+
 
         btn_filters_list.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,8 +159,37 @@ public class MainActivity extends AppCompatActivity implements FiltersListFragme
             }
         });
 
+        btn_add_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addImageToPicture();
+            }
+        });
+
         loadImage();
 
+    }
+
+    private void addImageToPicture() {
+        Dexter.withActivity(this)
+                .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                      if (report.areAllPermissionsGranted())
+                      {
+                          Intent intent= new Intent(Intent.ACTION_PICK);
+                          intent.setType("image/*");
+                          startActivityForResult(intent,PERMISSION_INSERT_IMAGE);
+                      }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        Toast.makeText(MainActivity.this, "Permiso denegado", Toast.LENGTH_SHORT).show();
+                    }
+                }).check();
 
     }
 
@@ -360,24 +390,29 @@ public class MainActivity extends AppCompatActivity implements FiltersListFragme
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode==RESULT_OK &&requestCode==PERMISSION_PICK_IMAGE)
+        if (resultCode==RESULT_OK )
         {
-            Bitmap bitmap = BitmapUtils.getBitmapFromGallery(this,data.getData(),800,800);
+            if (requestCode==PERMISSION_PICK_IMAGE) {
+                Bitmap bitmap = BitmapUtils.getBitmapFromGallery(this, data.getData(), 800, 800);
 
-            //clear bitmap memory
-            originalBitmap.recycle();
-            finalBitmap.recycle();
-            filteredBitmap.recycle();
+                //clear bitmap memory
+                originalBitmap.recycle();
+                finalBitmap.recycle();
+                filteredBitmap.recycle();
 
-            originalBitmap=bitmap.copy(Bitmap.Config.ARGB_8888,true);
-            finalBitmap=originalBitmap.copy(Bitmap.Config.ARGB_8888,true);
-            filteredBitmap=originalBitmap.copy(Bitmap.Config.ARGB_8888,true);
-            photoEditorView.getSource().setImageBitmap(originalBitmap);
-            bitmap.recycle();
+                originalBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+                finalBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true);
+                filteredBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true);
+                photoEditorView.getSource().setImageBitmap(originalBitmap);
+                bitmap.recycle();
 
-            //Render selected img thumbnail
-            filtersListFragment.displayThumbnail(originalBitmap);
-
+                //Render selected img thumbnail
+                filtersListFragment.displayThumbnail(originalBitmap);
+            }
+            else if (requestCode==PERMISSION_INSERT_IMAGE) {
+                Bitmap bitmap =BitmapUtils.getBitmapFromGallery(this,data.getData(),250,250);
+                photoEditor.addImage(bitmap);
+            }
         }
     }
 
