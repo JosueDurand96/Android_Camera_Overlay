@@ -6,6 +6,7 @@ package mvvm.com.myapplication;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Binder;
 import android.support.design.widget.CoordinatorLayout;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,18 +50,19 @@ import ja.burhanrashid52.photoeditor.PhotoEditorView;
 import mvvm.com.myapplication.Adapter.ViewPagerAdapter;
 import mvvm.com.myapplication.Interface.BrushFragmentListener;
 import mvvm.com.myapplication.Interface.EditImageFragmentListener;
+import mvvm.com.myapplication.Interface.EmojiFragmentListener;
 import mvvm.com.myapplication.Interface.FiltersListFragmentListener;
 import mvvm.com.myapplication.Utils.BitmapUtils;
 
 
 
-public class MainActivity extends AppCompatActivity implements FiltersListFragmentListener,EditImageFragmentListener, BrushFragmentListener {
+public class MainActivity extends AppCompatActivity implements FiltersListFragmentListener,EditImageFragmentListener, BrushFragmentListener, EmojiFragmentListener {
     public static final String pictureName= "josue.jpg";
     public static final int PERMISSION_PICK_IMAGE=1000;
 
     PhotoEditorView photoEditorView;
     PhotoEditor photoEditor;
-    CardView  btn_filters_list,btn_edit,btn_brush;
+    CardView  btn_filters_list,btn_edit,btn_brush,btn_emoji;
 
 
     CoordinatorLayout coordinatorLayout;
@@ -86,12 +89,13 @@ public class MainActivity extends AppCompatActivity implements FiltersListFragme
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("TE AMO");
+        getSupportActionBar().setTitle("TE AMO BEBE");
 
         //view
         photoEditorView=(PhotoEditorView) findViewById(R.id.image_preview);
         photoEditor= new PhotoEditor.Builder(this,photoEditorView)
                 .setPinchTextScalable(true)
+                .setDefaultEmojiTypeface(Typeface.createFromAsset(getAssets(),"emojione-android.ttf"))
                 .build();
 
 
@@ -100,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements FiltersListFragme
         btn_edit=(CardView)findViewById(R.id.btn_edit);
         btn_filters_list=(CardView)findViewById(R.id.btn_filters_list);
         btn_brush=(CardView) findViewById(R.id.btn_brush);
+        btn_emoji=(CardView)findViewById(R.id.btn_emoji);
 
         btn_filters_list.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +135,15 @@ public class MainActivity extends AppCompatActivity implements FiltersListFragme
                 BrushFragment brushFragment = BrushFragment.getInstance();
                 brushFragment.setListener(MainActivity.this);
                 brushFragment.show(getSupportFragmentManager(),brushFragment.getTag());
+            }
+        });
+
+        btn_emoji.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EmojiFragment emojiFragment = EmojiFragment.getInstance();
+                emojiFragment.setListener(MainActivity.this);
+                emojiFragment.show(getSupportFragmentManager(),emojiFragment.getTag());
             }
         });
 
@@ -378,5 +392,10 @@ public class MainActivity extends AppCompatActivity implements FiltersListFragme
             photoEditor.brushEraser();
         else
             photoEditor.setBrushDrawingMode(true);
+    }
+
+    @Override
+    public void onEmojiSelected(String emoji) {
+        photoEditor.addEmoji(emoji);
     }
 }
