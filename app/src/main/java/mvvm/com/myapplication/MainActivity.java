@@ -48,6 +48,7 @@ import ja.burhanrashid52.photoeditor.OnSaveBitmap;
 import ja.burhanrashid52.photoeditor.PhotoEditor;
 import ja.burhanrashid52.photoeditor.PhotoEditorView;
 import mvvm.com.myapplication.Adapter.ViewPagerAdapter;
+import mvvm.com.myapplication.Interface.AddTextFragmentListener;
 import mvvm.com.myapplication.Interface.BrushFragmentListener;
 import mvvm.com.myapplication.Interface.EditImageFragmentListener;
 import mvvm.com.myapplication.Interface.EmojiFragmentListener;
@@ -56,13 +57,13 @@ import mvvm.com.myapplication.Utils.BitmapUtils;
 
 
 
-public class MainActivity extends AppCompatActivity implements FiltersListFragmentListener,EditImageFragmentListener, BrushFragmentListener, EmojiFragmentListener {
+public class MainActivity extends AppCompatActivity implements FiltersListFragmentListener,EditImageFragmentListener, BrushFragmentListener, EmojiFragmentListener, AddTextFragmentListener {
     public static final String pictureName= "josue.jpg";
     public static final int PERMISSION_PICK_IMAGE=1000;
 
     PhotoEditorView photoEditorView;
     PhotoEditor photoEditor;
-    CardView  btn_filters_list,btn_edit,btn_brush,btn_emoji;
+    CardView  btn_filters_list,btn_edit,btn_brush,btn_emoji,btn_add_text;
 
 
     CoordinatorLayout coordinatorLayout;
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements FiltersListFragme
         btn_filters_list=(CardView)findViewById(R.id.btn_filters_list);
         btn_brush=(CardView) findViewById(R.id.btn_brush);
         btn_emoji=(CardView)findViewById(R.id.btn_emoji);
+        btn_add_text=(CardView)findViewById(R.id.btn_add_text) ;
 
         btn_filters_list.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,6 +149,14 @@ public class MainActivity extends AppCompatActivity implements FiltersListFragme
             }
         });
 
+        btn_add_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddTextFragment addTextFragment = AddTextFragment.getInstance();
+                addTextFragment.setListener(MainActivity.this);
+                addTextFragment.show(getSupportFragmentManager(),addTextFragment.getTag());
+            }
+        });
 
         loadImage();
 
@@ -397,5 +407,10 @@ public class MainActivity extends AppCompatActivity implements FiltersListFragme
     @Override
     public void onEmojiSelected(String emoji) {
         photoEditor.addEmoji(emoji);
+    }
+
+    @Override
+    public void onAddTextButtonClick(String text, int color) {
+        photoEditor.addText(text, color);
     }
 }
