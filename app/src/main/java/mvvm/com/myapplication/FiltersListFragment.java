@@ -4,6 +4,9 @@ package mvvm.com.myapplication;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,12 +33,19 @@ import mvvm.com.myapplication.Utils.SpacesItemDecoration;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FiltersListFragment extends Fragment implements FiltersListFragmentListener{
+public class FiltersListFragment extends BottomSheetDialogFragment implements FiltersListFragmentListener{
     RecyclerView recyclerView;
     ThumbnailAdapter adapter;
     List<ThumbnailItem>thumbnailItems;
 
     FiltersListFragmentListener listener;
+    static FiltersListFragment instance;
+
+    public static FiltersListFragment getInstance(){
+        if (instance==null)
+            instance=new FiltersListFragment();
+        return instance;
+    }
 
     public void setListener(FiltersListFragmentListener listener) {
         this.listener = listener;

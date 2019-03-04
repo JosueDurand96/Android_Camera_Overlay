@@ -4,6 +4,7 @@ package mvvm.com.myapplication;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +18,18 @@ import mvvm.com.myapplication.Interface.EditImageFragmentListener;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EditImageFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
+public class EditImageFragment extends BottomSheetDialogFragment implements SeekBar.OnSeekBarChangeListener {
 
     private EditImageFragmentListener listener;
     SeekBar seekbar_brightness,seekbar_constrant,seekbar_saturation;
 
+    static EditImageFragment instance;
+
+    public static EditImageFragment getInstance(){
+        if (instance==null)
+            instance=new EditImageFragment();
+        return instance;
+    }
 
     public void setListener(EditImageFragmentListener listener) {
         this.listener = listener;
