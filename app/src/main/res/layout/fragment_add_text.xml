@@ -20,13 +20,13 @@
         android:id="@+id/recycler_font"
         android:layout_marginBottom="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+        android:layout_height="wrap_content" />
 
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_color"
+        android:id="@+id/recycler_color1"
         android:layout_width="match_parent"
-        android:layout_height="80dp"></android.support.v7.widget.RecyclerView>
+        android:layout_height="80dp" />
 
     <Button
         android:id="@+id/btn_done"

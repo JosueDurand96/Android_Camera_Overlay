@@ -5,7 +5,9 @@ package mvvm.com.myapplication;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Binder;
@@ -84,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements FiltersListFragme
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //TODO:
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -407,7 +411,8 @@ public class MainActivity extends AppCompatActivity implements FiltersListFragme
                 bitmap.recycle();
 
                 //Render selected img thumbnail
-                filtersListFragment.displayThumbnail(originalBitmap);
+                filtersListFragment.displayThumbnail(    originalBitmap);
+               // filtersListFragment.displayThumbnail(originalBitmap);
             }
             else if (requestCode==PERMISSION_INSERT_IMAGE) {
                 Bitmap bitmap =BitmapUtils.getBitmapFromGallery(this,data.getData(),250,250);
@@ -444,8 +449,9 @@ public class MainActivity extends AppCompatActivity implements FiltersListFragme
         photoEditor.addEmoji(emoji);
     }
 
+
     @Override
-    public void onAddTextButtonClick(String text, int color) {
-        photoEditor.addText(text, color);
+    public void onAddTextButtonClick(Typeface typeface, String text, int color) {
+        photoEditor.addText(typeface,text,color);
     }
 }
