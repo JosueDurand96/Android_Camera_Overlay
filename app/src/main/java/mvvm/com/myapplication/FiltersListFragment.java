@@ -2,6 +2,7 @@ package mvvm.com.myapplication;
 
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.internal.BottomNavigationItemView;
@@ -40,10 +41,15 @@ public class FiltersListFragment extends BottomSheetDialogFragment implements Fi
 
     FiltersListFragmentListener listener;
     static FiltersListFragment instance;
-
-    public static FiltersListFragment getInstance(){
+    static Bitmap bitmap;
+    public static FiltersListFragment getInstance( Bitmap bitmapSave){
+        bitmap= bitmapSave;
         if (instance==null)
+        {
             instance=new FiltersListFragment();
+
+        }
+
         return instance;
     }
 
@@ -75,7 +81,7 @@ public class FiltersListFragment extends BottomSheetDialogFragment implements Fi
         recyclerView.addItemDecoration(new SpacesItemDecoration(space));
         recyclerView.setAdapter(adapter);
 
-        displayThumbnail(null);
+        displayThumbnail(bitmap);
         return itemView;
     }
 
